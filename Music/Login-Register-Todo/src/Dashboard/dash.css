@@ -1,0 +1,32 @@
+
+body {
+
+    text-align: center;
+    
+    }
+.dash{
+    width: 400px;
+    height: 400px;
+    background:#1161ee;
+    margin:10% auto;
+    border-radius: 50%;
+    position: relative;
+}
+
+.content{
+    position: absolute;
+    width: inherit;
+    height: auto;
+    top:50%;
+    transform: translateY(-50%);
+    text-align: center;
+    font-family: Arial;
+    color:#fff;
+    font-style: bold;
+    text-transform: capitalize;
+}
+
+.logout{
+    color:black;
+    margin-left: 100%
+}
