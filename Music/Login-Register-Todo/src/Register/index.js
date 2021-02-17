@@ -38,6 +38,7 @@ function Register(props) {
                       if(event.data.Type==="Success"){
                         localStorage.setItem("state","dashboard");
                         localStorage.setItem("name",username);
+                        localStorage.setItem("userId",event.data.Payload.id);
                          props.changeForm("dashboard");
                         props.changeUser(username);
                         props.changeUserID(event.data.Payload.id)
