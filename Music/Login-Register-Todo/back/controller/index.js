@@ -43,7 +43,11 @@ router.post('/register', async (req, res) => {
 
 router.post('/dashboard', async (req, res) => {
     // const { todo_list, userId } = req.body
-    const result = await TodoModel.addList(req.body);
+     const result = await TodoModel.addList(req.body);
+     const data = await TodoModel.viewList(req.body.userId)
+    //  console.log(data,"yywyeyew");
+    res.json({Message:"Successful", data})
+
 
     // try {
     //     if(result.length>0){
@@ -58,17 +62,31 @@ router.post('/dashboard', async (req, res) => {
 
 })
 
-router.get('/viewTodo', async (req, res) => {
-    const result = await TodoModel.viewList()
+router.post('/todoList', async (req, res) => {
+    const id = req.body.userId
+    // console.log(userId,"wrwerfwfrwfw");
+    // console.log(id);
+    // console.table(req.body)
+    const result = await TodoModel.viewTodoList(id)
+    // console.table(result);
     res.send(result)
+
+    // console.log(req.body.idUser);
 })
 
 router.post('/deleteTodo', async (req, res) => {
+    // console.table(req.body);
     const { id } = req.body
     const result = await TodoModel.deleteList(id)
+    // console.log(result);
     return res.send(result)
 })
 
+// router.get('/viewTodoDeleted', async(req, res)  => {
+//     const result = await TodoModel.viewList()
+//     return res.send(result)
+    
+// })
 
 // // DELETE A USER
 // app.delete('/users/:id',(req,res)=>{
@@ -81,9 +99,10 @@ router.post('/deleteTodo', async (req, res) => {
 // UPDATE A USER
 router.put('/updateTodo', async (req, res) => {
     // const {id } = req.body
-    await TodoModel.updateList(req)
+    // console.log(req.body);
+    await TodoModel.updateList(req.body)
     const result = await TodoModel.viewList()
-
+    // console.log(result);
     res.send(result)
     // rethink.table('users').get(req.params.id).update({ username: req.body.username, password: req.body.password }).run(connection, (err, result) => {
     //     if (err) res.json({ Type: 'Error', Message: "Unable to Update User" });

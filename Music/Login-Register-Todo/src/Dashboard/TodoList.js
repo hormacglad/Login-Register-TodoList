@@ -3,23 +3,12 @@ import React from 'react'
 export default function TodoList(props) {
     return (
         <div>
-        {/* {
-          props.data.todo_list.map((data) =>{
-            return(
-              <div>
-                <div>{data.list}</div>
-                <button>Update</button>
-                <button onClick={props.delete} id={data.id}>Delete</button>
-              </div>
-  
-            )
-          })
-        } */}
+
         {props.data.todo_list.map((data) => {
                         return(
                         <li key={data.id} >
                             {props.updateID == data.id && props.data.updateButtonText!=='Update'? ( 
-                                <input  id={data.id} value={props.data.handleinput_update}  onChange={props.handleInputUpdate}/>
+                                <input  id={data.id} value={props.handleinput_update} placeholder = {data.todo_input} onChange={props.handleInputUpdate}/>
                             ) :   <p id={data.id}>{data.todo_input}</p> 
                             }
                             {

@@ -10,13 +10,15 @@ export class Dashboard extends Component {
         super(props);
         this.state = {
             userId: props.userId,
+            // form: props.form,
             todo_input: '',
             todo_id_input: '',
             handleinput_update: '',
             updateButtonText: 'Update',
             update_id: '',
             todo_list: [],
-            delete_id: ''
+            delete_id: '',
+            updated_value:''
         }
     }
 
@@ -25,9 +27,14 @@ export class Dashboard extends Component {
     }
 
     handleViewTodo = async () => {
-        console.log('addadaad')
+        const userId = localStorage.getItem('userId')
+        console.log('addadaad', userId)
         try {
-            const view = await axios.get('/viewTodo');
+            const data = {
+                idUser: userId
+            }
+            const view = await axios.post('/todoList', data);
+            // const view = await axios.get('/viewTodo');
             console.log('%c 🥖 view: ', 'font-size:20px;background-color: #FCA650;color:#fff;', view);
             console.log(view.data);
             this.setState({ ...this.state, todo_list: view.data })
@@ -36,11 +43,15 @@ export class Dashboard extends Component {
         }
     }
 
-    handleLogout = () => {
-        localStorage.setItem("state", "login");
-        localStorage.setItem("name", null);
-        this.props.changeForm("login");
-    }
+    // handleLogout = () => {
+    //     localStorage.setItem("state", "login");
+    //     localStorage.setItem("name", null);
+    //     localStorage.setItem("userId", null)
+    //     // this.props.changeForm("login");
+    //     // this.setState({...this.state, form:"login"})
+    //     // this.setState({...this.state, form: "login"})
+    //     console.log(this.state.form);
+    // }
 
     handleInputChange = (event) => {
         const { value } = event.target
@@ -52,52 +63,77 @@ export class Dashboard extends Component {
         console.log(localStorage.getItem('userId'));
         const userId  = localStorage.getItem('userId')
         const { todo_id_input, todo_input, todo_list} = this.state
-        this.setState({ todo_list: [...todo_list, { userId: new Date().getTime(), todo_input: todo_input }], todo_input: '' })
         const todo_data = {
             todo_input,
             userId
         }
-        console.log(todo_input);
+        // console.log(todo_input);
+       
         try {
             const event = await axios.post('/dashboard', todo_data)
-            console.log(event.data.Type, event.data.Message)
+            console.log(event.data.data,"event");
+            // const result = await this.handleViewTodo()
+            // console.log("resulttttt",result.data);
+            
+            this.setState({ todo_list: event.data.data, todo_input: '' })
+            
+            // console.log(event.data.Type, event.data.Message)
         } catch (error) {
             console.log('%c 🥓 error: ', 'font-size:20px;background-color: #93C0A4;color:#fff;', error);
         }
+        
+        
     }
 
 
 
     handleDeleteButton = async (event) => {
-        console.log(event.target.id);
+        console.log(event.target);
+        const userId = localStorage.getItem('userId')
+        console.log(userId,"sdfsfewsfrewf");
         const { id } = event.target
+        // const userId  = localStorage.getItem('userId')
+        // console.log(id,'wasfsafsfs');
         // console.log(this.state.userId);
         // const event = axios.post('/deleteTodo',id)
+        
         try {
-            await axios.post('/deleteTodo', { id })
+            const result = await axios.post('/deleteTodo', { id })
             this.handleViewTodo()
-            //  .then(d => {
-            //      console.log('requesting')
-            //      return axios.get('/viewTodo')
-            //  })
-            //  .then(view => {
-            //     console.log(view.data);
+            // const todo_list = await axios.post('/todoList', {userId})
+            // console.log(todo_list.data,"ahdkahsdhadahkhsad");
+            // this.setState({ todo_list: todo_list.data })
 
-            //     this.setState({...this.state, todo_list: view.data })
-            //  })
-            //  .catch(e => {
-            //      console.log('ee',e.message)
-            //  })
-
-            //console.log(this.handleViewTodo)
-            // let view = await axios.get('/viewTodo');
-            // console.log(view.data);
-            // this.setState({...this.state, todo_list: view.data })
-            // console.log(event.data.Type, event.data.Message)
+            console.log(result);
+            
+            // this.handleViewDeleted()
+            // const view = await axios.post('/todoList', {userId});
+            // const view = await axios.get('/viewTodoDeleted')
+            // const view = await axios.post('/todoList', {userId});
+            // console.log(view.data,"gladys");
+            // this.setState({ ...this.state, todo_list: view.data })
+            
         } catch (error) {
             console.log('%c 🥓 error: ', 'font-size:20px;background-color: #93C0A4;color:#fff;', error);
         }
     }
+
+    // handleViewDeleted = async () => {
+    //     // const userId = localStorage.getItem('userId')
+    //     // console.log('addadaad', userId)
+    //     try {
+    //     //     const data = {
+    //     //         idUser: userId
+    //     //     }
+    //         const view = await axios.get('/viewTodoDeleted');
+    //         // const view = await axios.get('/viewTodo');
+    //         console.log('%c 🥖 view: ', 'font-size:20px;background-color: #FCA650;color:#fff;', view);
+    //         console.log(view.data);
+    //         this.setState({ ...this.state, todo_list: view.data })
+    //     } catch (e) {
+    //         console.log(e.message)
+    //     }
+    // }
 
     handleInputUpdate = (event) => {
         const { id, value } = event.target
@@ -109,34 +145,23 @@ export class Dashboard extends Component {
         const { id, todo_input } = event.target
         const { todo_list, handleinput_update} = this.state
         const userId = localStorage.getItem('userId')
-        console.log(event.target.id);
+        // console.log(event.target.id);
         const buttonType = (event.target.innerHTML);
-        console.log(buttonType);
+        // console.log(buttonType);
         const buttonText = buttonType === 'Update' ? 'Save' : 'Update';
-        console.log(buttonText);
+        // console.log(buttonText);
         if (buttonType === 'Update') {
             console.log('UPDATING')
             this.setState({ ...this.state, update_id: id, updateButtonText: buttonText, handleinput_update: todo_input })
         } else {
             console.log('SAVING')
-            console.log(this.state.handleinput_update);  
+            console.log(this.state.handleinput_update);
+            // console.log(id);
+            // console.log("akldsa", userId);  
             try {
                const result =  await axios.put('/updateTodo', { id, handleinput_update, userId })
                console.log(result.data,'wfghhgfgfggfg');
                this.setState({...this.state, todo_list: result.data})
-                // this.handleViewTodo()
-                //  .then(d => {
-                //      console.log('requesting')
-                //      return axios.get('/viewTodo')
-                //  })
-                //  .then(view => {
-                //     console.log(view.data);
-
-                //     this.setState({...this.state, todo_list: view.data })
-                //  })
-                //  .catch(e => {
-                //      console.log('ee',e.message)
-                //  })
             } catch (error) {
                 console.log('%c 🥓 error: ', 'font-size:20px;background-color: #93C0A4;color:#fff;', error);
             }
@@ -155,7 +180,7 @@ export class Dashboard extends Component {
         return (
 
             <div>
-                <button onClick={this.handleLogout}>LOGOUT</button>
+                <button onClick={this.props.handleLogoutButton}>LOGOUT</button>
                 <h1>{this.props.user}  </h1>
                 <h1>To-Do List </h1>
                 <input id="input" value={this.state.todo_input} type="text" onChange={this.handleInputChange} />
