@@ -2,11 +2,11 @@ const r = require('../config')
 
 
 module.exports = {
-    login: async ({username, password}) => {
+    login: async ({login_email, login_password}) => {
 
         const  result =  await  r.table('users')
-                               .filter(r.row('username').eq(username))
-                               .filter(r.row('password').eq(password))
+                               .filter(r.row('email').eq(login_email))
+                            //    .filter(r.row('password').eq(login_password))
                                .run()
 
         return result;
@@ -15,7 +15,7 @@ module.exports = {
     register: async (data) => {
 
         const result =   r.table('users')
-                         .filter(r.row('username').eq(data.username))
+                         .filter(r.row('username').eq(data.registerEmail))
                          .run()
 
         return result;
@@ -24,8 +24,8 @@ module.exports = {
     insert: async (data) => {
 
         const  result =  await r.table('users').insert({
-                                username:data.username,
-                                password:data.password}).run()
+                                email:data.registerEmail,
+                                password:data.registerPassword}).run()
 
         return result;
     }
