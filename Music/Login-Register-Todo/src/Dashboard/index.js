@@ -18,11 +18,6 @@ export class Dashboard extends Component {
             error_message:''
         }
     }
-    
-
-    componentDidMount() {
-        this.handleViewTodo()
-    }
 
     handleViewTodo = async () => {
         const userId = localStorage.getItem('userId')
@@ -51,7 +46,6 @@ export class Dashboard extends Component {
             const event = await axios.post('/addTodo', todo_data)
             this.setState({ todo_list: event.data.data, todo_input: '' })
             }else{
-                // this.setState({error_message:'No task to be added!' })
                 console.log('No task to be added!');
                 
             }
@@ -100,11 +94,6 @@ export class Dashboard extends Component {
         }
 
     }
-    handleUserWelcome = () =>{
-        const user = this.props.user
-        return user
-        
-    }
 
     handleCancelUpdate = (event) => {
         console.log('CANCELLING')
@@ -118,42 +107,8 @@ export class Dashboard extends Component {
         return (
 
             <div>
-                {/* <div
-            class="app-container d-flex align-items-center justify-content-center flex-column"
-            ng-app="myApp"
-            ng-controller="myController"
-            >
-    
-      <h3>Todo App</h3>
-      <div class="d-flex align-items-center mb-3">
-        <div class="form-group mr-3 mb-0">
-          <input
-            ng-model="yourTask"
-            type="text"
-            class="form-control"
-            id="formGroupExampleInput"
-            placeholder="Enter a task here"
-          />
-        </div>
-        <button
-          type="button"
-          class="btn btn-primary mr-3"
-          ng-click="saveTask()"
-        >
-          Save
-        </button>
-        <button type="button" class="btn btn-warning">
-        </button>
-      </div> */}
-                <button onClick={this.props.handleLogoutButton}>LOGOUT</button>
+                <button className= "btn btn-primary" onClick={this.props.handleLogoutButton}>LOGOUT</button>
                 <h1>{name[0].toUpperCase()}  </h1>
-                {/* <h1>{()=>this.handleUserWelcome}</h1> */}
-                {/* <h1>To-Do List </h1> */}
-                {/* <input id="input" value={this.state.todo_input} type="text" onChange={this.handleInputChange} /> */}
-                {/* <div class="form-group mr-3 mb-0">
-                    <input type="text" class="form-control" id="input" placeholder="Enter a task here" onChange={this.handleInputChange} />
-                </div>
-                <button type="button" class="btn btn-primary mr-3" onClick={this.handleAddButton}>Add</button> */}
                 <TodoList
                     data={this.state}
                     delete={this.handleDeleteButton}
@@ -170,5 +125,10 @@ export class Dashboard extends Component {
             </div>
         )
     }
+
+    componentDidMount() {
+        this.handleViewTodo()
+    }
+
 }
 export default Dashboard
